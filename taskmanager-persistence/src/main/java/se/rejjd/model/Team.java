@@ -6,15 +6,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 @Entity
 @Table(name = "teams")
 public class Team extends AbstractEntity {
 
+	@XmlElement
 	@Column(nullable = false, unique = true)
 	private String teamName;
+	@XmlElement
 	@Column(nullable = false)
 	private boolean activeTeam;
+	@XmlElement(name="user")
+	@XmlElementWrapper(name="users")
 	@OneToMany(mappedBy = "team")
 	private Collection<User> users;
 

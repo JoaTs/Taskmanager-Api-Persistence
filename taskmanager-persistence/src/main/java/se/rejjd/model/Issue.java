@@ -4,15 +4,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "issues")
 public class Issue extends AbstractEntity {
 
+	@XmlElement
 	@Column(nullable = false)
 	private String description;
+	@XmlElement
 	@Column(nullable = false)
 	private boolean openIssue;
+	@XmlElement
 	@ManyToOne
 	private WorkItem workItem;
 

@@ -7,23 +7,33 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity {
 
+	@XmlElement
 	@Column(nullable = false, unique = true)
 	private String username;
+	@XmlElement
 	@Column(nullable = false)
 	private String firstname;
+	@XmlElement
 	@Column(nullable = false)
 	private String lastname;
+	@XmlElement
 	@Column(nullable = false, unique = true)
 	private String userId;
+	@XmlElement
 	@Column(nullable = false)
 	private boolean activeUser;
+	@XmlElement
 	@ManyToOne
 	private Team team;
+	@XmlElement(name="workItem")
+	@XmlElementWrapper(name="workItems")
 	@OneToMany(mappedBy = "user")
 	private Collection<WorkItem> workitems;
 

@@ -8,4 +8,8 @@ public final class ServiceException extends Exception {
 		super(message);
 	}
 
+	public ServiceException(String string, Throwable e) {
+		super(string, e);
+	}
+
 }

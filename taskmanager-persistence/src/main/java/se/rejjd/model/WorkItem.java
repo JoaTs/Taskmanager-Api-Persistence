@@ -9,20 +9,29 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 @Entity
 @Table(name = "workitems")
 public class WorkItem extends AbstractEntity {
 
+	@XmlElement
 	@Column(nullable = false)
 	private String title;
+	@XmlElement
 	@Column(nullable = false)
 	private String description;
+	@XmlElement
 	@Enumerated(EnumType.STRING)
 	private Status status;
+	@XmlElement
 	@ManyToOne
 	private User user;
+	@XmlElement
 	private String dateOfCompletion;
+	@XmlElement(name="issue")
+	@XmlElementWrapper(name="issues")
 	@OneToMany(mappedBy = "workItem")
 	private Collection<Issue> issues;
 
