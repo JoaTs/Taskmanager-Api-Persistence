@@ -22,7 +22,7 @@ import se.rejjd.model.AuditorAwareImpl;
 import se.rejjd.model.User;
 
 @Configuration
-@EnableJpaRepositories("se.jdr.repository")
+@EnableJpaRepositories("se.rejjd.repository")
 @EnableTransactionManagement
 @EnableJpaAuditing
 public class Config {
