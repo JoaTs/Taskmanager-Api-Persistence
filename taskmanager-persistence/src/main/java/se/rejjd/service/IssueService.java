@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.Issue;
@@ -29,14 +30,18 @@ public final class IssueService {
 	}
 
 	public Issue addIssue(WorkItem workItem, String description) throws ServiceException {
+		try{
 		if (workItem.getStatus() == Status.DONE) {
-			return transaction.execute(() -> {
-				workItem.setStatus(Status.UNSTARTED);
-				workItemRepository.save(workItem);
-				return addOrUpdate(new Issue(workItem, description));
-			});
-		} else {
-			throw new ServiceException("Invalid work item status");
+				return transaction.execute(() -> {
+					workItem.setStatus(Status.UNSTARTED);
+					workItemRepository.save(workItem);
+					return addOrUpdate(new Issue(workItem, description));
+				});
+			} else {
+				throw new ServiceException("Invalid work item status");
+			}
+		} catch (DataAccessException e) {
+			throw new ServiceException("Could not add Issue", e);
 		}
 	}
 

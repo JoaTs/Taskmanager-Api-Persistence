@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.User;
@@ -52,17 +53,20 @@ public final class UserService {
 
 	public User updateUserStatus(User user, boolean status) throws ServiceException {
 		user.setActiveUser(status);
-		if (user.isActiveUser() == false) {
-			return transaction.execute(() -> {
-				workItemRepository.findByUserId(user.getId()).forEach(workItem -> {
-					workItem.setStatus(Status.UNSTARTED);
-					workItemRepository.save(workItem);
+		try {
+			if (user.isActiveUser() == false) {
+				return transaction.execute(() -> {
+					workItemRepository.findByUserId(user.getId()).forEach(workItem -> {
+						workItem.setStatus(Status.UNSTARTED);
+						workItemRepository.save(workItem);
+					});
+					return addOrUpdateUser(user);
 				});
-				return addOrUpdateUser(user);
-			});
+			}
+			return addOrUpdateUser(user);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Could not update User status", e);
 		}
-		return addOrUpdateUser(user);
-
 	}
 
 	public Collection<User> getUsersByTeamId(Long teamId) {
