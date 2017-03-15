@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,25 +39,29 @@ public final class WorkItemService {
 	}
 
 	public WorkItem updateWorkItemStatus(WorkItem workItem, WorkItem.Status status) throws ServiceException {
-		if (status == Status.ARCHIVED) {
-			return transaction.execute(() -> {
-				Collection<Issue> issues = issueRepository.findByWorkItemId(workItem.getId());
-				issues.forEach(i -> i.setOpenIssue(false));
+		try {
+			if (status == Status.ARCHIVED) {
+				return transaction.execute(() -> {
+					Collection<Issue> issues = issueRepository.findByWorkItemId(workItem.getId());
+					issues.forEach(i -> i.setOpenIssue(false));
 
-				issueRepository.save(issues);
+					issueRepository.save(issues);
+					workItem.setStatus(status);
+
+					return workItemRepository.save(workItem);
+				});
+
+			} else if (status == Status.DONE) {
 				workItem.setStatus(status);
-
-				return workItemRepository.save(workItem);
-			});
-
-		} else if (status == Status.DONE) {
-			workItem.setStatus(status);
-			workItem.setDateOfCompletion(getCurrentDate());
-		} else {
-			workItem.setDateOfCompletion("");
-			workItem.setStatus(status);
+				workItem.setDateOfCompletion(getCurrentDate());
+			} else {
+				workItem.setDateOfCompletion("");
+				workItem.setStatus(status);
+			}
+			return addOrUpdateWorkItem(workItem);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Could not update WorkItem status", e);
 		}
-		return addOrUpdateWorkItem(workItem);
 	}
 
 	public void addUserToWorkItem(WorkItem workItem, User user) throws ServiceException {
