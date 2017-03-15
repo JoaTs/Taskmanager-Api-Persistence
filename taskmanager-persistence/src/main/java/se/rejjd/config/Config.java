@@ -22,7 +22,7 @@ import se.rejjd.model.AuditorAwareImpl;
 import se.rejjd.model.User;
 
 @Configuration
-@EnableJpaRepositories("se.jdr.repository")
+@EnableJpaRepositories("se.rejjd.repository")
 @EnableTransactionManagement
 @EnableJpaAuditing
 public class Config {
@@ -57,7 +57,7 @@ public class Config {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setDataSource(dataSource());
 		factory.setJpaVendorAdapter(jpaVendorAdapter());
-		factory.setPackagesToScan("se.jdr.model");
+		factory.setPackagesToScan("se.rejjd.model");
 
 		return factory;
 	}

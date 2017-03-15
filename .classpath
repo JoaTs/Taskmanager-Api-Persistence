@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="taskmanager-api/src/main/java"/>
+	<classpathentry kind="src" path="taskmanager-api/src/test/java"/>
+	<classpathentry kind="src" path="taskmanager-persistence/src/main/java"/>
+	<classpathentry kind="src" path="taskmanager-persistence/src/test/java"/>
+	<classpathentry kind="lib" path="taskmanager-api/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="lib" path="taskmanager-persistence/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="taskmanager-persistence/target/classes"/>
+</classpath>

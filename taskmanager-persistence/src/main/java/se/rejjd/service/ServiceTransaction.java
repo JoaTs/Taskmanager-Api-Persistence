@@ -16,7 +16,6 @@ class ServiceTransaction {
 
 	@FunctionalInterface
 	public static interface Action<E extends AbstractEntity> {
-
 		E action() throws ServiceException;
 	}
 
