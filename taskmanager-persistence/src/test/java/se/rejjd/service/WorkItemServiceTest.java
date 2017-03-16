@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import se.rejjd.AbstractTest;
+import se.rejjd.model.Team;
 import se.rejjd.model.User;
 import se.rejjd.model.WorkItem;
 import se.rejjd.model.WorkItem.Status;
@@ -26,6 +27,8 @@ public class WorkItemServiceTest extends AbstractTest {
 	public IssueService issueService;
 	@Autowired
 	public UserService userService;
+	@Autowired
+	public TeamService teamService;
 	@Autowired
 	private EmbeddedDatabase database;
 
@@ -64,6 +67,20 @@ public class WorkItemServiceTest extends AbstractTest {
 	}
 
 	@Test
+	public void shouldThrowExceptionWhenWorkItemAddedToInactiveUser() throws ServiceException {
+		expectedException.expect(ServiceException.class);
+		expectedException.expectMessage("user must be active and cannot have more than 5 work items");
+
+		User inactiveUser = new User("usernam8888e", "firstname", "lastname", "userId00");
+		inactiveUser.setActiveUser(false);
+		userService.addOrUpdateUser(inactiveUser);
+
+		WorkItem workItem = new WorkItem("title", "description");
+		workItemService.addUserToWorkItem(workItem, inactiveUser);
+
+	}
+
+	@Test
 	public void canUpdateWorkItemStatus() throws ServiceException {
 		String statusDone = "DONE";
 		String statusArchived = "ARCHIVED";
@@ -93,7 +110,59 @@ public class WorkItemServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void canGetWorkItemById() {
+	public void canGetWorkItemByteam() throws ServiceException {
+		WorkItem workitemOne = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-1", "de"));
+		WorkItem workitemTwo = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-2", "desc"));
+		User user1 = new User("username123", "firstname", "lastname", "userId123");
+		Team team1 = new Team("Awesome Team");
+		
+		userService.addOrUpdateUser(user1);
+		teamService.addOrUpdateTeam(team1);
+		teamService.addUserToTeam(user1, team1);
+		
+		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-3", "descrip"));
+		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-4", "description"));
 
+		workItemService.addUserToWorkItem(workitemOne, user1);
+		workItemService.addUserToWorkItem(workitemTwo, user1);
+		ArrayList<WorkItem> listOfWorkItems = (ArrayList<WorkItem>) workItemService.getAllWorkItemsByTeam(user1.getTeam().getId());
+
+		assertThat(listOfWorkItems.size(), is(2));
+		assertThat(listOfWorkItems, contains(workitemOne, workitemTwo));
+	}
+
+	@Test
+	public void canGetAllWorkItemsByUser() throws ServiceException {
+		WorkItem workitemOne = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-1", "de"));
+		WorkItem workitemTwo = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-2", "desc"));
+		User user1 = new User("username123", "firstname", "lastname", "userId123");
+		
+		userService.addOrUpdateUser(user1);
+		
+		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-3", "descrip"));
+		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-4", "description"));
+
+		workItemService.addUserToWorkItem(workitemOne, user1);
+		workItemService.addUserToWorkItem(workitemTwo, user1);
+		ArrayList<WorkItem> listOfWorkItems = (ArrayList<WorkItem>) workItemService.getAllWorkItemsByUser(user1);
+
+		assertThat(listOfWorkItems.size(), is(2));
+		assertThat(listOfWorkItems, contains(workitemOne, workitemTwo));
+		
+	}
+
+	@Test
+	public void canGetAllWorkItemsByDescription() {
+		String description = "Testing";
+		WorkItem workitemOne = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-1", description));
+		WorkItem workitemTwo = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-2", description));
+
+		workItemService.addOrUpdateWorkItem(workitemOne);
+		workItemService.addOrUpdateWorkItem(workitemTwo);
+
+		ArrayList<WorkItem> listOfWorkItems = (ArrayList<WorkItem>) workItemService.getWorkItemByDescripton(description);
+
+		assertThat(listOfWorkItems.size(), is(2));
+		assertThat(listOfWorkItems, contains(workitemOne, workitemTwo));
 	}
 }

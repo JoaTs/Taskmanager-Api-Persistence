@@ -97,5 +97,24 @@ public class User extends AbstractEntity {
 		return "User " + getId() + ", username: " + username + ", firstname: " + firstname + ", lastname: " + lastname
 				+ ", userId : " + userId + ", active: " + activeUser + ", teamId: " + team;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof User) {
+			User userObj = (User) obj;
+			return userObj.getId() == getId();
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result += 7 * getId();
+		return result;
+	}
 
 }
