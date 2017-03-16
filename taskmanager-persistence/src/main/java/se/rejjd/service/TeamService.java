@@ -1,8 +1,6 @@
 package se.rejjd.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,9 +32,7 @@ public final class TeamService {
 	}
 
 	public Collection<Team> getAllTeams() {
-		List<Team> teams = new ArrayList<>();
-		teamRepository.findAll().forEach(t -> teams.add(t));
-		return teams;
+		return teamRepository.findAll();
 	}
 
 	public void addUserToTeam(User user, Team team) throws ServiceException {

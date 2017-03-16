@@ -2,11 +2,8 @@ package se.rejjd.service;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.validateMockitoUsage;
-import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 
@@ -14,23 +11,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import se.rejjd.AbstractTest;
-import se.rejjd.config.TestConfig;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
-import se.rejjd.repository.TeamRepository;
-import se.rejjd.repository.UserRepository;
 
-//@ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigContextLoader.class)
-//@MockBean({TeamRepository.class, UserRepository.class})
 public class TeamServiceTest extends AbstractTest {
 
 	@Rule
@@ -39,10 +25,6 @@ public class TeamServiceTest extends AbstractTest {
 	TeamService teamService;
 	@Autowired
 	UserService userService;
-	// @MockBean
-	UserRepository userRepository;
-	// @MockBean
-	TeamRepository teamRepository;
 
 	User user = new User("Robertasdasdasd", "roberts", "Hello", "world");
 	Team team = new Team("Team");
@@ -50,7 +32,6 @@ public class TeamServiceTest extends AbstractTest {
 
 	@Before
 	public void setup() {
-		// MockitoAnnotations.initMocks(this);
 		teamDB = null;
 	}
 
@@ -83,7 +64,7 @@ public class TeamServiceTest extends AbstractTest {
 		teamService.addOrUpdateTeam(team2);
 
 		Collection<Team> teams = teamService.getAllTeams();
-		
+
 		assertThat(teams, hasItems(team1, team2));
 	}
 
