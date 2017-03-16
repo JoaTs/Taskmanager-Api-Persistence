@@ -40,18 +40,27 @@ public final class TeamService {
 	}
 
 	public void addUserToTeam(User user, Team team) throws ServiceException {
-		Team teamToDB = addOrUpdateTeam(team);
+		Team teamToDB = getTeamById(team.getId());
+		if (teamToDB != null) {
+			if (isValidTeamSize(teamToDB)) {
+				user.setTeam(teamToDB);
+				userRepository.save(user);
+				teamRepository.save(teamToDB);
 
-		if (isValidTeamSize(teamToDB)) {
-			user.setTeam(teamToDB);
-			userRepository.save(user);
+			} else {
+				throw new ServiceException("Team is full!");
+			}
 		} else {
-			throw new ServiceException("Team is full!");
+			throw new ServiceException("Team not found");
 		}
 	}
 
 	private boolean isValidTeamSize(Team team) {
 		return userRepository.countByTeamId(team.getId()) < 10;
+	}
+
+	public Team getTeamById(Long id) {
+		return teamRepository.findOne(id);
 	}
 
 }
