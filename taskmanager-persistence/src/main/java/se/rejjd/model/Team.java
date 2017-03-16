@@ -19,8 +19,8 @@ public class Team extends AbstractEntity {
 	@XmlElement
 	@Column(nullable = false)
 	private boolean activeTeam;
-	@XmlElement(name="user")
-	@XmlElementWrapper(name="users")
+	@XmlElement(name = "user")
+	@XmlElementWrapper(name = "users")
 	@OneToMany(mappedBy = "team")
 	private Collection<User> users;
 
@@ -43,6 +43,10 @@ public class Team extends AbstractEntity {
 	public String getTeamName() {
 		return teamName;
 	}
+	
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
 
 	public Collection<User> getUsers() {
 		return users;
@@ -55,6 +59,25 @@ public class Team extends AbstractEntity {
 	@Override
 	public String toString() {
 		return "Team id: " + getId() + ", team name: " + teamName + ", active: " + activeTeam;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof Team) {
+			Team teamObj = (Team) obj;
+			return teamObj.getId() == getId();
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result += 7 * getId();
+		return result;
 	}
 
 }
