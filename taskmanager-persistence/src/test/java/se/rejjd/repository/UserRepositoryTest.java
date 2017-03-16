@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import se.rejjd.AbstractTest;
 import se.rejjd.model.Team;
@@ -23,7 +22,7 @@ public final class UserRepositoryTest extends AbstractTest {
 	@Autowired
 	private UserService userService;
 
-	@MockBean
+	// @MockBean
 	private UserRepository userRepository;
 
 	private String userName = "Robbe";

@@ -28,5 +28,4 @@ public class UserServiceTest extends AbstractTest {
 		User user = new User("cl1", "Robert", "Savela", "12");
 		userService.addOrUpdateUser(user);
 	}
-
 }

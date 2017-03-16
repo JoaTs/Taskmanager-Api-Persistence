@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import se.rejjd.AbstractTest;
 import se.rejjd.model.User;
@@ -26,8 +25,8 @@ public class WorkItemServiceTest extends AbstractTest {
 	public IssueService issueService;
 	@Autowired
 	public UserService userService;
-	@Autowired
-	private EmbeddedDatabase database;
+	// @Autowired
+	// private EmbeddedDatabase database;
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();

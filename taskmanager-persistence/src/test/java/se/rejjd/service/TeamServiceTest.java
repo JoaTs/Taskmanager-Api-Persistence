@@ -14,6 +14,7 @@ import se.rejjd.model.User;
 import se.rejjd.repository.TeamRepository;
 import se.rejjd.repository.UserRepository;
 
+//@ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigContextLoader.class)
 public class TeamServiceTest extends AbstractTest {
 
 	@Rule
