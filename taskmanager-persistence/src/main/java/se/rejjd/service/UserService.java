@@ -77,7 +77,7 @@ public final class UserService {
 		return userRepository.findUserByUserId(userId);
 	}
 
-	public Collection<User> getUser(String firstname, String lastname, String username) {
+	public Collection<User> getUsers(String firstname, String lastname, String username) {
 		return userRepository.getUser(firstname, lastname, username);
 	}
 

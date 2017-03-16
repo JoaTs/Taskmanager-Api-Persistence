@@ -64,4 +64,7 @@ public final class IssueService {
 		issuerepository.findAll().forEach(i -> listOfIssues.add(i));
 		return listOfIssues;
 	}
+	public Issue findIssueById(Long id){
+		return issuerepository.findOne(id);
+	}
 }
