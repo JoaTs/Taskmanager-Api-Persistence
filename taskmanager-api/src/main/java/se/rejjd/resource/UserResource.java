@@ -3,8 +3,10 @@ package se.rejjd.resource;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -34,14 +36,33 @@ public class UserResource {
         this.userService = userService;
     }
     
+    @PUT
+    @Path("{userId}")
+    public Response updateUser(@PathParam("userId") String userId,@FormParam("firstname") String firstname) throws ServiceException{
+    	User userfromDb = userService.getUserByUserId(userId);
+    	if(userfromDb == null){
+    		return Response.status(Status.NOT_FOUND).build();
+    	}
+    	if("".equals(firstname) || firstname.equals(null)){
+    		userfromDb.setFirstName(firstname);
+    	}
+    	userService.addOrUpdateUser(userfromDb);
+    	return Response.ok(userfromDb.toString()).build();
+    	
+    }
+    
     @POST
     public Response addUser(User user) throws ServiceException {
+    	User fromDb = userService.getUserByUserId(user.getUserId());
+    	if(fromDb != null){
+    		return Response.status(Status.FOUND).build();
+    	}
         user = new User(user.getUsername(), user.getFirstname(), user.getLastname(), user.getUserId());
-        
         userService.addOrUpdateUser(user);
-        
         URI location = uriInfo.getAbsolutePathBuilder().path(user.getUserId()).build();
         return Response.created(location).build();
+        
+        
         
     }
     
