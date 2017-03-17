@@ -89,5 +89,13 @@ public class TeamServiceTest extends AbstractTest {
 
 		assertThat(team.getTeamName(), is(teamDB.getTeamName()));
 	}
+	
+	public void canUpdateTeamStatus(){
+		team = teamService.addOrUpdateTeam(team);
+		Team updatedTeam = teamService.updateTeamStatus(team, false);
+		teamDB = teamService.getTeamById(updatedTeam.getId());
+		assertThat(teamDB.isActiveTeam(), is(false));
+		
+	}
 
 }

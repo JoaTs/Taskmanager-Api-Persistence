@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 import se.rejjd.AbstractTest;
+import se.rejjd.model.Issue;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
 import se.rejjd.model.WorkItem;
@@ -164,5 +165,22 @@ public class WorkItemServiceTest extends AbstractTest {
 
 		assertThat(listOfWorkItems.size(), is(2));
 		assertThat(listOfWorkItems, contains(workitemOne, workitemTwo));
+	}
+	
+	@Test
+	public void canGetAllWorkItemsWithAnIssue() throws ServiceException{
+		WorkItem workItem1 = new WorkItem("Stuff to do", "Do things");
+		WorkItem workItem2 = new WorkItem("Nothing", "Vacation");
+		WorkItem workItem3 = new WorkItem("Work work", "No play");
+		WorkItem updatedWorkItem1 = workItemService.updateWorkItemStatus(workItem1, Status.DONE);
+		WorkItem updatedWorkItem2 = workItemService.updateWorkItemStatus(workItem2, Status.DONE);
+		WorkItem updatedWorkItem3 = workItemService.updateWorkItemStatus(workItem3, Status.DONE);
+		Issue issue1 = issueService.addIssue(updatedWorkItem1, "Not right");
+		Issue issue2 = issueService.addIssue(updatedWorkItem3, "Johnny");
+		
+		ArrayList<WorkItem> workItemsWithIssues = (ArrayList<WorkItem>) workItemService.getAllWorkItemsWithIssues();
+		assertThat(workItemsWithIssues.size(), is(2));
+		assertThat(workItemsWithIssues,contains(updatedWorkItem1, updatedWorkItem3));
+		
 	}
 }
