@@ -1,47 +1,61 @@
 package se.rejjd.resource;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URI;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.User;
+import se.rejjd.service.ServiceException;
+import se.rejjd.service.UserService;
 
 @Component
-@Path("users")
+@Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
-
-	public static final Map<Long, User> users = new HashMap<>();
-
-	@POST
-	public Response addUser() {
-		User user = new User("username123", "firstname", "lastname", "userid");
-		users.put(user.getId(), user);
-		return Response.status(Status.CREATED).header("Location", "users/" + user.getId()).build();
-	}
-	
-	@GET
-	@Path("{id}")
-	public Response getUserById(@PathParam("id") String id) {
-		if (users.containsKey(id)) {
-			return Response.ok(users.get(id).toString()).build();
-		}
-		return Response.status(Status.NOT_FOUND).build();
-	}
-	
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getTest() {
-		return "Hello";
-	}
-
+    
+    private UserService userService;
+    @Context
+    private UriInfo uriInfo;
+    
+    public UserResource(UserService userService) {
+        this.userService = userService;
+    }
+    
+    @POST
+    public Response addUser(User user) throws ServiceException {
+        user = new User(user.getUsername(), user.getFirstname(), user.getLastname(), user.getUserId());
+        
+        userService.addOrUpdateUser(user);
+        
+        URI location = uriInfo.getAbsolutePathBuilder().path(user.getUserId()).build();
+        return Response.created(location).build();
+        
+    }
+    
+    
+    @GET
+    @Path("{id}")
+    public Response getUserById(@PathParam("id") String id) {
+        User user = userService.getUserByUserId(id);
+        
+        if (user == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        return Response.ok(user).build();
+        
+    }
+    
 }
