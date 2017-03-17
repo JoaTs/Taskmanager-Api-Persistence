@@ -7,8 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Team", propOrder = { "id", "teamName", "activeTeam" })
 
 @Entity
 @Table(name = "teams")
@@ -20,9 +26,8 @@ public class Team extends AbstractEntity {
 	@XmlElement
 	@Column(nullable = false)
 	private boolean activeTeam;
-	@XmlElement(name = "user")
-	@XmlElementWrapper(name = "users")
-	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER) // TODO 
+	@XmlTransient
+	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
 	private Collection<User> users;
 
 	protected Team() {
@@ -44,7 +49,7 @@ public class Team extends AbstractEntity {
 	public String getTeamName() {
 		return teamName;
 	}
-	
+
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
