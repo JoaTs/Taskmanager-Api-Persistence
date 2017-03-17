@@ -99,4 +99,8 @@ public final class UserService {
 		return listOfUsers;
 	}
 
+	public boolean userExists(User user) {
+		return userRepository.findOne(user.getId()) != null;
+	}
+
 }
