@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
@@ -21,7 +22,7 @@ public class Team extends AbstractEntity {
 	private boolean activeTeam;
 	@XmlElement(name = "user")
 	@XmlElementWrapper(name = "users")
-	@OneToMany(mappedBy = "team")
+	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER) // TODO 
 	private Collection<User> users;
 
 	protected Team() {

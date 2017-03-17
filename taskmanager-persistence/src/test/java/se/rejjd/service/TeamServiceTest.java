@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.rejjd.AbstractTest;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
-import se.rejjd.repository.TeamRepository;
-import se.rejjd.repository.UserRepository;
 
-//@ContextConfiguration(classes = TestConfig.class, loader = AnnotationConfigContextLoader.class)
 public class TeamServiceTest extends AbstractTest {
 
 	@Rule
@@ -28,10 +25,6 @@ public class TeamServiceTest extends AbstractTest {
 	TeamService teamService;
 	@Autowired
 	UserService userService;
-	// @MockBean
-	UserRepository userRepository;
-	// @MockBean
-	TeamRepository teamRepository;
 
 	User user = new User("Robertasdasdasd", "roberts", "Hello", "world");
 	Team team = new Team("Team");
