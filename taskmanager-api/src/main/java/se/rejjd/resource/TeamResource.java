@@ -22,9 +22,11 @@ import org.springframework.stereotype.Component;
 import se.rejjd.model.AbstractEntityContainer;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
+import se.rejjd.model.WorkItem;
 import se.rejjd.service.ServiceException;
 import se.rejjd.service.TeamService;
 import se.rejjd.service.UserService;
+import se.rejjd.service.WorkItemService;
 
 @Component
 @Path("/teams")
@@ -34,13 +36,15 @@ public final class TeamResource {
 
 	private final TeamService teamService;
 	private final UserService userService;
+	private final WorkItemService workItemService;
 
 	@Context
 	private UriInfo uriInfo;
 
-	public TeamResource(TeamService teamService, UserService userService) {
+	public TeamResource(TeamService teamService, UserService userService, WorkItemService workItemService) {
 		this.teamService = teamService;
 		this.userService = userService;
+		this.workItemService = workItemService;
 	}
 
 	@GET
@@ -70,6 +74,16 @@ public final class TeamResource {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(users).build();
+	}
+	
+	@GET
+	@Path("{id}/workitems")
+	public Response getWorkItemsFromTeam(@PathParam("id") long id){
+		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
+		if (workItems.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(workItems).build();
 	}
 
 	@POST
