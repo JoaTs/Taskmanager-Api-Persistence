@@ -75,18 +75,18 @@ public final class TeamResource {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 
-	@PUT
-	@Path("{id}")
-	public Response addUserToTeam(User user, Team team, @PathParam("id") long id) throws WebApplicationException {
-		if (team.getId() != id) {
-			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
-		}
-		try {
-			teamService.addUserToTeam(user, team);
-		} catch (ServiceException e) {
-			throw new WebApplicationException(e, Status.NOT_FOUND);
-		}
-		return Response.ok().build();
-	}
+//	@PUT
+//	@Path("{id}")
+//	public Response addUserToTeam(User user, Team team, @PathParam("id") long id) throws WebApplicationException {
+//		if (team.getId() != id) {
+//			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
+//		}
+//		try {
+//			teamService.addUserToTeam(user, team);
+//		} catch (ServiceException e) {
+//			throw new WebApplicationException(e, Status.NOT_FOUND);
+//		}
+//		return Response.ok().build();
+//	}
 
 }

@@ -29,7 +29,7 @@ public class User extends AbstractEntity {
     @XmlElement
     @Column(nullable = false)
     private boolean activeUser;
-    @XmlElement
+    @XmlTransient
     @ManyToOne
     private Team team;
     @XmlTransient

@@ -29,21 +29,26 @@ public class TaskmanagerPersistenceApplication {
 
 //			TeamService teamService = context.getBean(TeamService.class);
 //			
-//			teamService.addOrUpdateTeam(new Team("teamName1"));
+//			Team team = teamService.addOrUpdateTeam(new Team("teamName3"));
 //			teamService.addOrUpdateTeam(new Team("teamName2"));
 //			teamService.addOrUpdateTeam(new Team("teamName3"));
 //			teamService.addOrUpdateTeam(new Team("teamName4"));
-			
+//			
 //			WorkItem workItem = new WorkItem("title", "description");
 //			
 //			WorkItemService workItemService = context.getBean(WorkItemService.class);
 //			workItemService.addOrUpdateWorkItem(workItem);
 //			
-//			User user = new User("usernamhytd", "firstname", "lastnam", "10");
+//			User user = new User("usernamhytdasddd", "firstname", "lastnam", "2002");
+//			User user2 = new User("usernamhytdasdddd", "firstname", "lastnam", "2003");
 //			
 //			UserService userService = context.getBean(UserService.class);
 //			
 //			userService.addOrUpdateUser(user);
+//			userService.addOrUpdateUser(user2);
+//			
+//			teamService.addUserToTeam(user, team);
+//			teamService.addUserToTeam(user2, team);
 //			
 //			workItemService.addUserToWorkItem(workItem, user);
 //			
