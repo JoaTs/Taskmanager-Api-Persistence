@@ -28,7 +28,7 @@ public class Team extends AbstractEntity {
 	private boolean activeTeam;
 	@XmlTransient
 	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
-	private Collection<User> users;
+	private Collection<User> users; // show number of users
 
 	protected Team() {
 	}
@@ -85,5 +85,4 @@ public class Team extends AbstractEntity {
 		result += 7 * getId();
 		return result;
 	}
-
 }

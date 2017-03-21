@@ -40,6 +40,8 @@ public final class TeamService {
 	public void addUserToTeam(User user, Team team) throws ServiceException {
 		if (teamExists(team) && userService.userExists(user)) {
 			if (isValidTeamSize(team)) {
+				user = userService.getUserByUserId(user.getUserId());
+				team = teamRepository.findOne(team.getId());
 				user.setTeam(team);
 				userService.addOrUpdateUser(user);
 				teamRepository.save(team);
