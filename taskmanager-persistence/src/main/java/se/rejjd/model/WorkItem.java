@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "workitems")
@@ -30,8 +30,6 @@ public class WorkItem extends AbstractEntity {
 	private User user;
 	@XmlElement
 	private String dateOfCompletion;
-	@XmlElement(name="issue")
-	@XmlElementWrapper(name="issues")
 	@OneToMany(mappedBy = "workItem")
 	private Collection<Issue> issues;
 
@@ -64,6 +62,7 @@ public class WorkItem extends AbstractEntity {
 		return dateOfCompletion;
 	}
 
+	@XmlTransient
 	public Collection<Issue> getIssues() {
 		return issues;
 	}
