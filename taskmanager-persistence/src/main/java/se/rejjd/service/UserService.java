@@ -30,6 +30,9 @@ public final class UserService {
 
 	public User addOrUpdateUser(User user) throws ServiceException {
 		if (user.getUsername().length() >= 10) {
+			if(user.isActiveUser() == false){
+				return updateUserStatus(user, false);
+			}
 			return userRepository.save(user);
 		} else {
 			throw new ServiceException("Username is too short!");
@@ -51,7 +54,7 @@ public final class UserService {
 		return addOrUpdateUser(user);
 	}
 
-	public User updateUserStatus(User user, boolean status) throws ServiceException {
+	private User updateUserStatus(User user, boolean status) throws ServiceException {
 		user.setActiveUser(status);
 		try {
 			if (user.isActiveUser() == false) {
@@ -60,10 +63,10 @@ public final class UserService {
 						workItem.setStatus(Status.UNSTARTED);
 						workItemRepository.save(workItem);
 					});
-					return addOrUpdateUser(user);
+					return userRepository.save(user);
 				});
 			}
-			return addOrUpdateUser(user);
+			return userRepository.save(user);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Could not update User status", e);
 		}

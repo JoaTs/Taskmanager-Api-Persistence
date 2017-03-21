@@ -37,6 +37,7 @@ public class User extends AbstractEntity {
     private Collection<WorkItem> workitems;
     
     protected User() {
+    	
     }
     
     public User(String username, String firstname, String lastname, String userId) {

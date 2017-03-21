@@ -73,8 +73,8 @@ public class UserServiceTest extends AbstractTest {
 		workItemService.addUserToWorkItem(workItem, userintest);
 		WorkItem workItemstatus = workItemService.updateWorkItemStatus(workItem, Status.STARTED);
 		assertThat(workItemstatus.getStatus(), is(Status.STARTED));
-		
-		userService.updateUserStatus(userintest, false);
+		userintest.setActiveUser(false);
+		userService.addOrUpdateUser(userintest);
 		WorkItem workItemfromDb = workItemService.getWorkItemById(workItemstatus.getId());
 		assertThat(workItemfromDb.getStatus() , is(Status.UNSTARTED));
 		assertThat(userintest.isActiveUser(), is(false));
@@ -82,8 +82,10 @@ public class UserServiceTest extends AbstractTest {
 	
 	@Test
 	public void canUpdateUserStatus() throws ServiceException {
-		User userWithUpdatedStatus = userService.updateUserStatus(user, false);
-		assertFalse(userWithUpdatedStatus.isActiveUser());
+		user.setActiveUser(false);
+		User updatedUser = userService.addOrUpdateUser(user);
+		User userfromdb = userService.getUserByUserId(updatedUser.getUserId());
+		assertFalse(userfromdb.isActiveUser());
 	}
 	
 	@Test
