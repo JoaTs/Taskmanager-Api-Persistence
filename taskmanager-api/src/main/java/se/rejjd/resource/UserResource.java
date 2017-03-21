@@ -5,15 +5,12 @@ import java.util.Collection;
 
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,7 +18,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import se.rejjd.model.User;
 import se.rejjd.service.ServiceException;
@@ -65,7 +61,6 @@ public class UserResource {
 		userService.addOrUpdateUser(user);
 		URI location = uriInfo.getAbsolutePathBuilder().path(user.getUserId()).build();
 		return Response.created(location).build();
-
 	}
 
 	@GET
@@ -79,10 +74,11 @@ public class UserResource {
 		return Response.ok(user).build();
 
 	}
+
 	@GET
 	public Response getUserByName(@BeanParam UserQueryNameParam param) {
 		Collection<User> users = userService.getUsers(param.getFirstname(), param.getLastname(), param.getUsername());
-		if (users.isEmpty()){
+		if (users.isEmpty()) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(users).build();

@@ -19,11 +19,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
+import se.rejjd.model.AbstractEntityContainer;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
+import se.rejjd.model.WorkItem;
 import se.rejjd.service.ServiceException;
 import se.rejjd.service.TeamService;
 import se.rejjd.service.UserService;
+import se.rejjd.service.WorkItemService;
 
 @Component
 @Path("/teams")
@@ -33,20 +36,54 @@ public final class TeamResource {
 
 	private final TeamService teamService;
 	private final UserService userService;
+	private final WorkItemService workItemService;
 
 	@Context
 	private UriInfo uriInfo;
 
-	public TeamResource(TeamService teamService, UserService userService) {
+	public TeamResource(TeamService teamService, UserService userService, WorkItemService workItemService) {
 		this.teamService = teamService;
 		this.userService = userService;
+		this.workItemService = workItemService;
 	}
 
 	@GET
 	public Response getAllTeams() {
 		Collection<Team> teams = teamService.getAllTeams();
-
+		if (teams.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 		return Response.ok(teams).build();
+	}
+
+	@GET
+	@Path("{id}")
+	public Response getTeamById(@PathParam("id") long id) {
+		Team team = teamService.getTeamById(id);
+		if (team == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(teamService.getTeamById(id)).build();
+	}
+
+	@GET
+	@Path("{id}/users")
+	public Response getUsersFromTeam(@PathParam("id") long id) {
+		Collection<User> users = userService.getUsersByTeamId(id);
+		if (users.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(users).build();
+	}
+	
+	@GET
+	@Path("{id}/workitems")
+	public Response getWorkItemsFromTeam(@PathParam("id") long id){
+		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
+		if (workItems.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(workItems).build();
 	}
 
 	@POST
@@ -75,18 +112,24 @@ public final class TeamResource {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 
-//	@PUT
-//	@Path("{id}")
-//	public Response addUserToTeam(User user, Team team, @PathParam("id") long id) throws WebApplicationException {
-//		if (team.getId() != id) {
-//			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
-//		}
-//		try {
-//			teamService.addUserToTeam(user, team);
-//		} catch (ServiceException e) {
-//			throw new WebApplicationException(e, Status.NOT_FOUND);
-//		}
-//		return Response.ok().build();
-//	}
+	@PUT
+	@Path("{id}/{userId}")
+	public Response addUserToTeam(@PathParam("id") long id, @PathParam("userId") String userId,
+			AbstractEntityContainer container) throws WebApplicationException {
+		Team team = container.getTeam();
+		User user = container.getUser();
+
+		if (team.getId() != id && user.getUserId() != userId) {
+			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
+		}
+		try {
+			teamService.addUserToTeam(user, team);
+		} catch (ServiceException e) {
+			// throw new WebApplicationException(
+			// Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build());
+			return Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
+		}
+		return Response.ok().build();
+	}
 
 }

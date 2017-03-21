@@ -6,10 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
@@ -61,7 +63,6 @@ public class WorkItem extends AbstractEntity {
 	public String getDateOfCompletion() {
 		return dateOfCompletion;
 	}
-
 	@XmlTransient
 	public Collection<Issue> getIssues() {
 		return issues;
