@@ -63,7 +63,14 @@ public final class TeamResource {
 	}
 
 	@GET
-	@Path("{/id/users}")
+	@Path("{id}/users")
+	public Response getUsersFromTeam(@PathParam("id") long id) {
+		Collection<User> users = userService.getUsersByTeamId(id);
+		if (users.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(users).build();
+	}
 
 	@POST
 	public Response addTeam(Team team) {
