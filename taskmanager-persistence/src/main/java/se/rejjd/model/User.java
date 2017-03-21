@@ -31,9 +31,7 @@ public class User extends AbstractEntity {
 	private boolean activeUser;
 	@XmlTransient
 	@ManyToOne
-	private Team team; // transient on team not working
-	// @XmlElement
-	// private long teamId; // added code
+	private Team team;
 	@XmlTransient
 	@OneToMany(mappedBy = "user")
 	private Collection<WorkItem> workitems;
@@ -89,9 +87,8 @@ public class User extends AbstractEntity {
 		this.activeUser = activeUser;
 	}
 
-	public void setTeam(Team team) { // added code
+	public void setTeam(Team team) {
 		this.team = team;
-		// teamId = team.getId();
 	}
 
 	@Override

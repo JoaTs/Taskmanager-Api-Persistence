@@ -1,9 +1,10 @@
 package se.rejjd.resource;
 
 import java.net.URI;
+import java.util.Collection;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -24,8 +25,8 @@ import se.rejjd.service.UserService;
 
 @Component
 @Path("/users")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class UserResource {
 
 	private UserService userService;
@@ -38,18 +39,16 @@ public class UserResource {
 
 	@PUT
 	@Path("{userId}")
-	public Response updateUser(@PathParam("userId") String userId, @FormParam("firstname") String firstname)
-			throws ServiceException {
+	public Response updateUser(@PathParam("userId") String userId, User user) throws ServiceException {
+		if (!userId.equals(user.getUserId())) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		User userfromDb = userService.getUserByUserId(userId);
 		if (userfromDb == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		if ("".equals(firstname) || firstname.equals(null)) {
-			userfromDb.setFirstName(firstname);
-		}
-		userService.addOrUpdateUser(userfromDb);
-		return Response.ok(userfromDb.toString()).build();
-
+		userService.addOrUpdateUser(user);
+		return Response.ok().build();
 	}
 
 	@POST
@@ -73,5 +72,15 @@ public class UserResource {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(user).build();
+
+	}
+
+	@GET
+	public Response getUserByName(@BeanParam UserQueryNameParam param) {
+		Collection<User> users = userService.getUsers(param.getFirstname(), param.getLastname(), param.getUsername());
+		if (users.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(users).build();
 	}
 }
