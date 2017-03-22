@@ -34,11 +34,22 @@ public class TaskmanagerPersistenceApplication {
 //			teamService.addOrUpdateTeam(new Team("teamName3"));
 //			teamService.addOrUpdateTeam(new Team("teamName4"));
 //			
-//			WorkItem workItem = new WorkItem("title", "description");
+			WorkItem workItem = new WorkItem("title12", "description12");
+			WorkItem workItem1 = new WorkItem("title122", "description12");
+			WorkItem workItem2 = new WorkItem("title123", "description12");
+			WorkItem workItem3 = new WorkItem("title124", "description12");
+			WorkItem workItem4 = new WorkItem("title125", "description12");
+			WorkItem workItem5 = new WorkItem("title126", "description12");
 //			
-//			WorkItemService workItemService = context.getBean(WorkItemService.class);
-//			workItemService.addOrUpdateWorkItem(workItem);
-//			
+			WorkItemService workItemService = context.getBean(WorkItemService.class);
+			workItemService.addOrUpdateWorkItem(workItem);
+			workItemService.addOrUpdateWorkItem(workItem1);
+			workItemService.addOrUpdateWorkItem(workItem2);
+			workItemService.addOrUpdateWorkItem(workItem3);
+			workItemService.addOrUpdateWorkItem(workItem4);
+			workItemService.addOrUpdateWorkItem(workItem5);
+			
+//		
 //			User user = new User("usernamhytdasddd", "firstname", "lastnam", "2002");
 //			User user2 = new User("usernamhytdasdddd", "firstname", "lastnam", "2003");
 //			

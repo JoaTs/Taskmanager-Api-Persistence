@@ -20,8 +20,11 @@ import javax.ws.rs.core.UriInfo;
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.User;
+import se.rejjd.model.WorkItem;
 import se.rejjd.service.ServiceException;
+import se.rejjd.service.TeamService;
 import se.rejjd.service.UserService;
+import se.rejjd.service.WorkItemService;
 
 @Component
 @Path("/users")
@@ -30,11 +33,13 @@ import se.rejjd.service.UserService;
 public class UserResource {
 
 	private UserService userService;
+	private WorkItemService workItemService;
 	@Context
 	private UriInfo uriInfo;
 
-	public UserResource(UserService userService) {
+	public UserResource(UserService userService, WorkItemService workItemService) {
 		this.userService = userService;
+		this.workItemService = workItemService;
 	}
 
 	@PUT
@@ -82,5 +87,25 @@ public class UserResource {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(users).build();
+	}
+	
+	@GET
+	@Path("{userId}/workitems")
+	public Response getWorkItemsByUser(@PathParam("userId") String userId){
+		User user = userService.getUserByUserId(userId);
+		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByUser(user);
+		if (workItems.isEmpty()) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(workItems).build();
+	}
+	
+	@PUT
+	@Path("{userId}/workitems/{id}")
+	public Response addUserToWorkItem(@PathParam("userId") String userId, @PathParam("id") long id) throws ServiceException {
+		WorkItem workItem = workItemService.getWorkItemById(id);
+		User user = userService.getUserByUserId(userId);
+		workItemService.addUserToWorkItem(workItem, user);
+		return Response.ok().build();
 	}
 }
