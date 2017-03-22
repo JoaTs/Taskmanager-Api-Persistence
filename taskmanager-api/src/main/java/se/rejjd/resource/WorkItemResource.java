@@ -7,19 +7,20 @@ import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.WorkItem;
-
+import se.rejjd.service.ServiceException;
 import se.rejjd.service.WorkItemService;
 
 @Component
@@ -68,12 +69,28 @@ public class WorkItemResource {
 				return Response.status(Status.NOT_FOUND).build();
 			}
 			return Response.ok(workitems).build();
-		} else{
+		} else {
 			workitems = workItemService.getWorkItemByDescripton(param.getDescription());
 			if (workitems.isEmpty()) {
 				return Response.status(Status.NOT_FOUND).build();
 			}
 			return Response.ok(workitems).build();
 		}
+	}
+
+	@PUT
+	@Path("{id}")
+	public Response updateWorkItem(@PathParam("id") Long id, WorkItem workItem) throws ServiceException {
+		if (workItem.getId() != id) {
+			return Response.status(Status.BAD_REQUEST).entity("conflicting id's").build();
+		}
+		try {
+			WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
+			workItemService.updateWorkItemStatus(workitemFromDb, workItem.getStatus());
+		} catch (ServiceException e) {
+			return Response.status(Status.NOT_MODIFIED).entity(e.getMessage()).build();
+		}
+
+		return Response.ok().build();
 	}
 }
