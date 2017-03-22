@@ -19,7 +19,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
+import se.rejjd.model.Issue;
 import se.rejjd.model.WorkItem;
+import se.rejjd.service.IssueService;
 import se.rejjd.service.ServiceException;
 import se.rejjd.service.WorkItemService;
 
@@ -33,9 +35,11 @@ public class WorkItemResource {
 	private UriInfo uriInfo;
 
 	private final WorkItemService workItemService;
+	private final IssueService issueService;
 
-	public WorkItemResource(WorkItemService workItemService) {
+	public WorkItemResource(WorkItemService workItemService, IssueService issueService) {
 		this.workItemService = workItemService;
+		this.issueService = issueService;
 	}
 
 	@POST
@@ -88,9 +92,48 @@ public class WorkItemResource {
 			WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
 			workItemService.updateWorkItemStatus(workitemFromDb, workItem.getStatus());
 		} catch (ServiceException e) {
-			return Response.status(Status.NOT_MODIFIED).entity(e.getMessage()).build();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
 
 		return Response.ok().build();
+	}
+
+	@POST
+	@Path("{id}/issues")
+	public Response addIssueToWorkItem(@PathParam("id") Long id, String issueDescription) {
+		WorkItem workItem = workItemService.getWorkItemById(id);
+		Issue issue;
+		if (workItem == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		try {
+			issue = issueService.addIssue(workItem, issueDescription);
+		} catch (ServiceException e) {
+			return Response.status(Status.EXPECTATION_FAILED).entity(e.getMessage()).build();
+		}
+		URI location = uriInfo.getAbsolutePathBuilder().path(issue.getId().toString()).build();
+		return Response.created(location).build();
+	}
+
+	@PUT
+	@Path("{id}/issues/{issueId}")
+	public Response updateIssue(@PathParam("id") Long id, @PathParam("issueId") Long issueId, Issue issue) {
+		WorkItem workItem = workItemService.getWorkItemById(id);
+		Issue issueFromDb = issueService.findIssueById(issue.getId());
+		if (workItem == null || issueFromDb == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		issueService.addOrUpdate(issue);
+		return Response.ok().build();
+	}
+
+	@GET
+	@Path("/issues")
+	public Response getWorkItemsWithIssues() {
+		Collection<WorkItem> workItems = workItemService.getAllWorkItemsWithIssues();
+		if (workItems.isEmpty()) {
+			return Response.noContent().build();
+		}
+		return Response.ok(workItems).build();
 	}
 }
