@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.springframework.stereotype.Component;
 
-import se.rejjd.model.AbstractEntityContainer;
+import se.rejjd.data.TeamUserContainer;
 import se.rejjd.model.Team;
 import se.rejjd.model.User;
 import se.rejjd.model.WorkItem;
@@ -113,9 +113,9 @@ public final class TeamResource {
 	}
 
 	@PUT
-	@Path("{id}/{userId}")
+	@Path("{id}/users/{userId}")
 	public Response addUserToTeam(@PathParam("id") long id, @PathParam("userId") String userId,
-			AbstractEntityContainer container) throws WebApplicationException {
+			TeamUserContainer container) throws WebApplicationException {
 		Team team = container.getTeam();
 		User user = container.getUser();
 
