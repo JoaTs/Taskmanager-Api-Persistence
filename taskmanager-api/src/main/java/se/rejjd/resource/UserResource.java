@@ -101,7 +101,7 @@ public class UserResource {
 
 	@PUT
 	@Path("{userId}/workitems/{id}")
-	public Response addUserToWorkItem(@PathParam("userId") String userId, @PathParam("id") long id)
+	public Response addUserToWorkItem(@PathParam("userId") String userId, @PathParam("id") Long id)
 			throws ServiceException {
 		WorkItem workItem = workItemService.getWorkItemById(id);
 		User user = userService.getUserByUserId(userId);
