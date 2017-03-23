@@ -70,7 +70,7 @@ public class WorkItemResource {
 		if (param.getStatus() != null) {
 			workitems = workItemService.getWorkItemsByStatus(param.getStatus());
 			if (workitems.isEmpty()) {
-				return Response.status(Status.NOT_FOUND).build();
+				return Response.noContent().build();
 			}
 			return Response.ok(workitems).build();
 		} else {
