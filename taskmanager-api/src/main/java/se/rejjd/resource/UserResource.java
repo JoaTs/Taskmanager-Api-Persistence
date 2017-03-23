@@ -83,7 +83,7 @@ public class UserResource {
 	public Response getUserByName(@BeanParam UserQueryNameParam param) {
 		Collection<User> users = userService.getUsers(param.getFirstname(), param.getLastname(), param.getUsername());
 		if (users.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(users).build();
 	}
@@ -94,7 +94,7 @@ public class UserResource {
 		User user = userService.getUserByUserId(userId);
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByUser(user);
 		if (workItems.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
 	}

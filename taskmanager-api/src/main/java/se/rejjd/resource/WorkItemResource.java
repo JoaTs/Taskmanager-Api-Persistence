@@ -76,7 +76,7 @@ public class WorkItemResource {
 		} else {
 			workitems = workItemService.getWorkItemByDescripton(param.getDescription());
 			if (workitems.isEmpty()) {
-				return Response.status(Status.NOT_FOUND).build();
+				return Response.noContent().build();
 			}
 			return Response.ok(workitems).build();
 		}

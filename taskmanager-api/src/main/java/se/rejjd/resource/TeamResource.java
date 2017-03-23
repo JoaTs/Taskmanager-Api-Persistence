@@ -51,7 +51,7 @@ public final class TeamResource {
 	public Response getAllTeams() {
 		Collection<Team> teams = teamService.getAllTeams();
 		if (teams.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(teams).build();
 	}
@@ -71,7 +71,7 @@ public final class TeamResource {
 	public Response getUsersFromTeam(@PathParam("id") Long id) {
 		Collection<User> users = userService.getUsersByTeamId(id);
 		if (users.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(users).build();
 	}
@@ -81,7 +81,7 @@ public final class TeamResource {
 	public Response getWorkItemsFromTeam(@PathParam("id") Long id){
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
 		if (workItems.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
 	}
@@ -126,8 +126,6 @@ public final class TeamResource {
 		try {
 			teamService.addUserToTeam(user, team);
 		} catch (ServiceException e) {
-			// throw new WebApplicationException(
-			// Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build());
 			return Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
 		}
 		return Response.ok().build();
