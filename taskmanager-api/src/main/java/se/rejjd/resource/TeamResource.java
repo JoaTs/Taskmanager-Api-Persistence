@@ -90,8 +90,9 @@ public final class TeamResource {
 	public Response addTeam(Team team) {
 		Team newTeam = teamService.getTeamById(team.getId());
 		if (newTeam == null) {
-			Team teamfromDB = teamService.addOrUpdateTeam(team);
-			URI location = uriInfo.getAbsolutePathBuilder().path(teamfromDB.getId().toString()).build();
+			team = new Team(team.getTeamName());
+			teamService.addOrUpdateTeam(team);
+			URI location = uriInfo.getAbsolutePathBuilder().path(team.getId().toString()).build();
 			return Response.created(location).build();
 
 		}
