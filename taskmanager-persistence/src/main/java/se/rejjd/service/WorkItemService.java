@@ -52,6 +52,12 @@ public final class WorkItemService {
 				});
 
 			} else if (status == Status.DONE) {
+				Collection<Issue> issues = issueRepository.findByWorkItemId(workItem.getId());
+				for (Issue issue : issues) {
+					if (issue.isOpenIssue()) {
+						throw new ServiceException("work item still has open issues");
+					}
+				}
 				workItem.setStatus(status);
 				workItem.setDateOfCompletion(getCurrentDate());
 			} else {

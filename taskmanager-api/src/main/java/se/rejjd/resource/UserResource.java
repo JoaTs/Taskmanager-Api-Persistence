@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import se.rejjd.model.User;
 import se.rejjd.model.WorkItem;
 import se.rejjd.service.ServiceException;
-import se.rejjd.service.TeamService;
 import se.rejjd.service.UserService;
 import se.rejjd.service.WorkItemService;
 
@@ -88,10 +87,10 @@ public class UserResource {
 		}
 		return Response.ok(users).build();
 	}
-	
+
 	@GET
 	@Path("{userId}/workitems")
-	public Response getWorkItemsByUser(@PathParam("userId") String userId){
+	public Response getWorkItemsByUser(@PathParam("userId") String userId) {
 		User user = userService.getUserByUserId(userId);
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByUser(user);
 		if (workItems.isEmpty()) {
@@ -99,10 +98,11 @@ public class UserResource {
 		}
 		return Response.ok(workItems).build();
 	}
-	
+
 	@PUT
 	@Path("{userId}/workitems/{id}")
-	public Response addUserToWorkItem(@PathParam("userId") String userId, @PathParam("id") long id) throws ServiceException {
+	public Response addUserToWorkItem(@PathParam("userId") String userId, @PathParam("id") Long id)
+			throws ServiceException {
 		WorkItem workItem = workItemService.getWorkItemById(id);
 		User user = userService.getUserByUserId(userId);
 		workItemService.addUserToWorkItem(workItem, user);
