@@ -97,5 +97,24 @@ public class WorkItem extends AbstractEntity {
 		return "Workitem " + getId() + ", title: " + title + ", description: " + description + ", status: " + status
 				+ ", assignedUserId: " + user + ", dateOfCompletion: " + dateOfCompletion;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof WorkItem) {
+			WorkItem WorkItemObj = (WorkItem) obj;
+			return WorkItemObj.getId() == getId();
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result += 7 * getId();
+		return result;
+	}
 
 }

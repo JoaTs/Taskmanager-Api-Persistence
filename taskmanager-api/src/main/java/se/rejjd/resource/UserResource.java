@@ -27,12 +27,12 @@ import se.rejjd.service.WorkItemService;
 
 @Component
 @Path("/users")
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class UserResource {
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public final class UserResource {
 
-	private UserService userService;
-	private WorkItemService workItemService;
+	private final UserService userService;
+	private final WorkItemService workItemService;
 	@Context
 	private UriInfo uriInfo;
 
