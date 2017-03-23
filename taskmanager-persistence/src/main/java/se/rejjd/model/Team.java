@@ -4,17 +4,10 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Team", propOrder = { "id", "teamName", "activeTeam" })
 
 @Entity
 @Table(name = "teams")
@@ -26,8 +19,8 @@ public class Team extends AbstractEntity {
 	@XmlElement
 	@Column(nullable = false)
 	private boolean activeTeam;
-	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
-	private Collection<User> users; // show number of users
+	@OneToMany(mappedBy = "team")
+	private Collection<User> users;
 
 	protected Team() {
 	}
