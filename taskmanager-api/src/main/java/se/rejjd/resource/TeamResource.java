@@ -58,7 +58,7 @@ public final class TeamResource {
 
 	@GET
 	@Path("{id}")
-	public Response getTeamById(@PathParam("id") long id) {
+	public Response getTeamById(@PathParam("id") Long id) {
 		Team team = teamService.getTeamById(id);
 		if (team == null) {
 			return Response.status(Status.NOT_FOUND).build();
@@ -68,7 +68,7 @@ public final class TeamResource {
 
 	@GET
 	@Path("{id}/users")
-	public Response getUsersFromTeam(@PathParam("id") long id) {
+	public Response getUsersFromTeam(@PathParam("id") Long id) {
 		Collection<User> users = userService.getUsersByTeamId(id);
 		if (users.isEmpty()) {
 			return Response.status(Status.NOT_FOUND).build();
@@ -78,7 +78,7 @@ public final class TeamResource {
 	
 	@GET
 	@Path("{id}/workitems")
-	public Response getWorkItemsFromTeam(@PathParam("id") long id){
+	public Response getWorkItemsFromTeam(@PathParam("id") Long id){
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
 		if (workItems.isEmpty()) {
 			return Response.status(Status.NOT_FOUND).build();
@@ -100,7 +100,7 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}")
-	public Response updateTeam(Team team, @PathParam("id") long id) {
+	public Response updateTeam(Team team, @PathParam("id") Long id) {
 		if (team.getId() != id) {
 			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
 		}
@@ -114,7 +114,7 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}/{userId}")
-	public Response addUserToTeam(@PathParam("id") long id, @PathParam("userId") String userId,
+	public Response addUserToTeam(@PathParam("id") Long id, @PathParam("userId") String userId,
 			AbstractEntityContainer container) throws WebApplicationException {
 		Team team = container.getTeam();
 		User user = container.getUser();
