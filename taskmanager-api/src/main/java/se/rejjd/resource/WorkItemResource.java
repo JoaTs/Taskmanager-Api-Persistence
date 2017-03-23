@@ -29,7 +29,7 @@ import se.rejjd.service.WorkItemService;
 @Path("/workitems")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class WorkItemResource {
+public final class WorkItemResource {
 
 	@Context
 	private UriInfo uriInfo;
