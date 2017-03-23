@@ -114,7 +114,7 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}/users/{userId}")
-	public Response addUserToTeam(@PathParam("id") long id, @PathParam("userId") String userId,
+	public Response addUserToTeam(@PathParam("id") Long id, @PathParam("userId") String userId,
 			TeamUserContainer container) throws WebApplicationException {
 
 		Team team = container.getTeam();

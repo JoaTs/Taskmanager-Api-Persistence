@@ -9,10 +9,6 @@ public final class UserQueryNameParam {
 	@DefaultValue("%") @QueryParam("lastname") private String lastname;
 	@DefaultValue("%") @QueryParam("username") private String username;
 	
-	public UserQueryNameParam(){
-		
-	}
-	
 	public String getFirstname() {
 		return firstname;
 	}
