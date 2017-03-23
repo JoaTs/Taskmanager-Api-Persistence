@@ -75,10 +75,10 @@ public final class TeamResource {
 		}
 		return Response.ok(users).build();
 	}
-	
+
 	@GET
 	@Path("{id}/workitems")
-	public Response getWorkItemsFromTeam(@PathParam("id") long id){
+	public Response getWorkItemsFromTeam(@PathParam("id") long id) {
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
 		if (workItems.isEmpty()) {
 			return Response.status(Status.NOT_FOUND).build();
