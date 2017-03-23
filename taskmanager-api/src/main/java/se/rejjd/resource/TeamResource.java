@@ -47,6 +47,19 @@ public final class TeamResource {
 		this.workItemService = workItemService;
 	}
 
+	@POST
+	public Response addTeam(Team team) {
+		Team newTeam = teamService.getTeamById(team.getId());
+		if (newTeam == null) {
+			team = new Team(team.getTeamName());
+			teamService.addOrUpdateTeam(team);
+			URI location = uriInfo.getAbsolutePathBuilder().path(team.getId().toString()).build();
+			return Response.created(location).build();
+
+		}
+		return Response.status(Status.BAD_REQUEST).build();
+	}
+
 	@GET
 	public Response getAllTeams() {
 		Collection<Team> teams = teamService.getAllTeams();
@@ -75,28 +88,15 @@ public final class TeamResource {
 		}
 		return Response.ok(users).build();
 	}
-	
+
 	@GET
 	@Path("{id}/workitems")
-	public Response getWorkItemsFromTeam(@PathParam("id") Long id){
+	public Response getWorkItemsFromTeam(@PathParam("id") Long id) {
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
 		if (workItems.isEmpty()) {
 			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
-	}
-
-	@POST
-	public Response addTeam(Team team) {
-		Team newTeam = teamService.getTeamById(team.getId());
-		if (newTeam == null) {
-			team = new Team(team.getTeamName());
-			teamService.addOrUpdateTeam(team);
-			URI location = uriInfo.getAbsolutePathBuilder().path(team.getId().toString()).build();
-			return Response.created(location).build();
-
-		}
-		return Response.status(Status.BAD_REQUEST).build();
 	}
 
 	@PUT
