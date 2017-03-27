@@ -30,16 +30,12 @@ public abstract class AbstractEntity {
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@CreatedDate
 	private Date createdDate;
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	@JsonSerialize(using = JsonDateSerializer.class)
 	@CreatedBy
 	private String createdBy;
 	@JsonDeserialize(using = JsonDateDeserializer.class)
 	@JsonSerialize(using = JsonDateSerializer.class)
 	@LastModifiedDate
 	private Date lastModifiedDate;
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	@JsonSerialize(using = JsonDateSerializer.class)
 	@LastModifiedBy
 	private String lastModifiedBy;
 
