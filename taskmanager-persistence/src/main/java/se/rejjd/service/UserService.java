@@ -3,15 +3,20 @@ package se.rejjd.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import se.rejjd.model.User;
 import se.rejjd.model.WorkItem.Status;
 import se.rejjd.repository.UserRepository;
 import se.rejjd.repository.WorkItemRepository;
+import se.rejjd.service.ServiceTransaction.Action;
 
 @Component
 public final class UserService {
@@ -27,16 +32,19 @@ public final class UserService {
 		this.workItemRepository = workItemRepository;
 		this.transaction = transaction;
 	}
-
+	
+	
 	public User addOrUpdateUser(User user) throws ServiceException {
-		if (user.getUsername().length() >= 10) {
-			if (user.isActiveUser() == false) {
-				return updateUserStatus(user, false);
-			}
-			return userRepository.save(user);
-		} else {
-			throw new ServiceException("Username is too short!");
-		}
+		return transaction.executeAction(()->{
+			if (user.getUsername().length() >= 10) {
+				if (user.isActiveUser() == false) {
+					return updateUserStatus(user, false);
+				}
+				return userRepository.save(user);
+			} else {
+				throw new ServiceException("Username is too short!");
+			}			
+		});
 	}
 
 	public User updateUsername(User user, String username) throws ServiceException {

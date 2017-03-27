@@ -45,8 +45,11 @@ public final class IssueService {
 		}
 	}
 
-	private Issue addOrUpdate(Issue issue) {
-		return issuerepository.save(issue);
+	private Issue addOrUpdate(Issue issue) throws ServiceException {
+		return transaction.executeAction(()->{
+			return issuerepository.save(issue);
+			
+		});
 	}
 
 	public Issue updateIssue(Issue issue) throws ServiceException {

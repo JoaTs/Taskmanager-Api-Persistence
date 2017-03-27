@@ -34,8 +34,10 @@ public final class WorkItemService {
 		this.transaction = transaction;
 	}
 
-	public WorkItem addOrUpdateWorkItem(WorkItem workItem) {
-		return workItemRepository.save(workItem);
+	public WorkItem addOrUpdateWorkItem(WorkItem workItem) throws ServiceException {
+		return transaction.executeAction(()-> {
+			return workItemRepository.save(workItem);
+		});
 	}
 
 	public WorkItem updateWorkItemStatus(WorkItem workItem, WorkItem.Status status) throws ServiceException {

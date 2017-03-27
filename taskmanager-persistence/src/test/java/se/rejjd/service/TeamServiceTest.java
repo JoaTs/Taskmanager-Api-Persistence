@@ -36,7 +36,7 @@ public class TeamServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void canCreateTeam() {
+	public void canCreateTeam() throws ServiceException {
 		teamService.addOrUpdateTeam(team);
 		teamDB = teamService.getTeamById(team.getId());
 		assertThat(team, is(teamDB));
@@ -56,7 +56,7 @@ public class TeamServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void canGetAllTeam() {
+	public void canGetAllTeam() throws ServiceException {
 		Team team1 = new Team("team1");
 		Team team2 = new Team("team2");
 
@@ -82,7 +82,7 @@ public class TeamServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void canUpdateTeam() {
+	public void canUpdateTeam() throws ServiceException {
 		String newTeamName = "Minecraft";
 		team.setTeamName(newTeamName);
 		teamDB = teamService.addOrUpdateTeam(team);
@@ -90,7 +90,7 @@ public class TeamServiceTest extends AbstractTest {
 		assertThat(team.getTeamName(), is(teamDB.getTeamName()));
 	}
 	
-	public void canUpdateTeamStatus(){
+	public void canUpdateTeamStatus() throws ServiceException{
 		team = teamService.addOrUpdateTeam(team);
 		Team updatedTeam = teamService.updateTeamStatus(team, false);
 		teamDB = teamService.getTeamById(updatedTeam.getId());

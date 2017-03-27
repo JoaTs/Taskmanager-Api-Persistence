@@ -16,19 +16,25 @@ public final class TeamService {
 	private final TeamRepository teamRepository;
 	private final UserRepository userRepository;
 	private final UserService userService;
+	private final ServiceTransaction transaction;
 
 	@Autowired
-	public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserService userService) {
+	public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserService userService,
+			ServiceTransaction transaction) {
 		this.teamRepository = teamRepository;
 		this.userRepository = userRepository;
 		this.userService = userService;
+		this.transaction = transaction;
+
 	}
 
-	public Team addOrUpdateTeam(Team team) {
-		return teamRepository.save(team);
+	public Team addOrUpdateTeam(Team team) throws ServiceException {
+		return transaction.executeAction(() -> {
+			return teamRepository.save(team);
+		});
 	}
 
-	public Team updateTeamStatus(Team team, boolean status) {
+	public Team updateTeamStatus(Team team, boolean status) throws ServiceException {
 		team.setActiveTeam(status);
 		return addOrUpdateTeam(team);
 	}

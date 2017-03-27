@@ -37,7 +37,7 @@ public class WorkItemServiceTest extends AbstractTest {
 	public ExpectedException expectedException = ExpectedException.none();
 
 	@Test
-	public void canAddOrUpdateWorkItem() {
+	public void canAddOrUpdateWorkItem() throws ServiceException {
 		WorkItem workitem = workItemService.addOrUpdateWorkItem(new WorkItem("broken windows", "replace the windows"));
 		WorkItem workItemFromDb = workItemService.getWorkItemById(workitem.getId());
 
@@ -154,7 +154,7 @@ public class WorkItemServiceTest extends AbstractTest {
 	}
 
 	@Test
-	public void canGetAllWorkItemsByDescription() {
+	public void canGetAllWorkItemsByDescription() throws ServiceException {
 		String description = "Testing";
 		WorkItem workitemOne = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-1", description));
 		WorkItem workitemTwo = workItemService.addOrUpdateWorkItem(new WorkItem("workitem-2", description));

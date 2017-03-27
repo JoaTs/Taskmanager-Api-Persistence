@@ -48,7 +48,7 @@ public final class TeamResource {
 	}
 
 	@POST
-	public Response addTeam(Team team) {
+	public Response addTeam(Team team) throws ServiceException {
 		Team newTeam = teamService.getTeamById(team.getId());
 		if (newTeam == null) {
 			team = new Team(team.getTeamName());
@@ -101,7 +101,7 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}")
-	public Response updateTeam(Team team, @PathParam("id") Long id) {
+	public Response updateTeam(Team team, @PathParam("id") Long id) throws ServiceException {
 		if (team.getId() != id) {
 			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
 		}

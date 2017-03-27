@@ -43,7 +43,7 @@ public final class WorkItemResource {
 	}
 
 	@POST
-	public Response addWorkItem(WorkItem workItem) {
+	public Response addWorkItem(WorkItem workItem) throws ServiceException {
 		WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
 		if (workitemFromDb != null) {
 			return Response.status(Status.FOUND).build();
