@@ -2,17 +2,17 @@ package se.rejjd.model;
 
 import org.springframework.data.domain.AuditorAware;
 
-public class AuditorAwareImpl implements AuditorAware<User> {
+public class AuditorAwareImpl implements AuditorAware<String> {
 
-	private User auditor;
+	private String auditor;
 
-	public void setAuditor(User auditor) {
+	public void setAuditor(String auditor) {
 		this.auditor = auditor;
 	}
 
 	@Override
-	public User getCurrentAuditor() {
-		return auditor;
+	public String getCurrentAuditor() {
+		return "DreamierTeam";
 	}
 
 }
