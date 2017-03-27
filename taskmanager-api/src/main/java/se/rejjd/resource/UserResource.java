@@ -41,20 +41,6 @@ public final class UserResource {
 		this.workItemService = workItemService;
 	}
 
-	@PUT
-	@Path("{userId}")
-	public Response updateUser(@PathParam("userId") String userId, User user) throws ServiceException {
-		if (!userId.equals(user.getUserId())) {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		User userfromDb = userService.getUserByUserId(userId);
-		if (userfromDb == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		userService.addOrUpdateUser(user);
-		return Response.ok().build();
-	}
-
 	@POST
 	public Response addUser(User user) throws ServiceException {
 		User fromDb = userService.getUserByUserId(user.getUserId());
@@ -97,6 +83,20 @@ public final class UserResource {
 			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
+	}
+
+	@PUT
+	@Path("{userId}")
+	public Response updateUser(@PathParam("userId") String userId, User user) throws ServiceException {
+		if (!userId.equals(user.getUserId())) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		User userfromDb = userService.getUserByUserId(userId);
+		if (userfromDb == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		userService.addOrUpdateUser(user);
+		return Response.ok().build();
 	}
 
 	@PUT

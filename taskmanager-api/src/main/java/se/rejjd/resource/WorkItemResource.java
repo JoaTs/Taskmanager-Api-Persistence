@@ -43,7 +43,7 @@ public final class WorkItemResource {
 	}
 
 	@POST
-	public Response createWorkItem(WorkItem workItem) {
+	public Response addWorkItem(WorkItem workItem) {
 		WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
 		if (workitemFromDb != null) {
 			return Response.status(Status.FOUND).build();
@@ -51,6 +51,23 @@ public final class WorkItemResource {
 		workItem = new WorkItem(workItem.getTitle(), workItem.getDescription());
 		workItemService.addOrUpdateWorkItem(workItem);
 		URI location = uriInfo.getAbsolutePathBuilder().path(workItem.getId().toString()).build();
+		return Response.created(location).build();
+	}
+
+	@POST
+	@Path("{id}/issues")
+	public Response addIssueToWorkItem(@PathParam("id") Long id, String issueDescription) {
+		WorkItem workItem = workItemService.getWorkItemById(id);
+		Issue issue;
+		if (workItem == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		try {
+			issue = issueService.addIssue(workItem, issueDescription);
+		} catch (ServiceException e) {
+			return Response.status(Status.EXPECTATION_FAILED).entity(e.getMessage()).build();
+		}
+		URI location = uriInfo.getAbsolutePathBuilder().path(issue.getId().toString()).build();
 		return Response.created(location).build();
 	}
 
@@ -82,6 +99,16 @@ public final class WorkItemResource {
 		}
 	}
 
+	@GET
+	@Path("/issues")
+	public Response getWorkItemsWithIssues() {
+		Collection<WorkItem> workItems = workItemService.getAllWorkItemsWithIssues();
+		if (workItems.isEmpty()) {
+			return Response.noContent().build();
+		}
+		return Response.ok(workItems).build();
+	}
+
 	@PUT
 	@Path("{id}")
 	public Response updateWorkItem(@PathParam("id") Long id, WorkItem workItem) throws ServiceException {
@@ -96,23 +123,6 @@ public final class WorkItemResource {
 		}
 
 		return Response.ok().build();
-	}
-
-	@POST
-	@Path("{id}/issues")
-	public Response addIssueToWorkItem(@PathParam("id") Long id, String issueDescription) {
-		WorkItem workItem = workItemService.getWorkItemById(id);
-		Issue issue;
-		if (workItem == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		try {
-			issue = issueService.addIssue(workItem, issueDescription);
-		} catch (ServiceException e) {
-			return Response.status(Status.EXPECTATION_FAILED).entity(e.getMessage()).build();
-		}
-		URI location = uriInfo.getAbsolutePathBuilder().path(issue.getId().toString()).build();
-		return Response.created(location).build();
 	}
 
 	@PUT
