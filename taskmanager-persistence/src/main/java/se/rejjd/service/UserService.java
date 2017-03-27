@@ -30,7 +30,7 @@ public final class UserService {
 
 	public User addOrUpdateUser(User user) throws ServiceException {
 		if (user.getUsername().length() >= 10) {
-			if(user.isActiveUser() == false){
+			if (user.isActiveUser() == false) {
 				return updateUserStatus(user, false);
 			}
 			return userRepository.save(user);
@@ -102,8 +102,10 @@ public final class UserService {
 		return listOfUsers;
 	}
 
-	public boolean userExists(User user) {
-		return userRepository.findOne(user.getId()) != null;
+	public void userExists(User user) throws ServiceException {
+		if (userRepository.findOne(user.getId()) == null) {
+			throw new ServiceException("User not found");
+		}
 	}
 
 }

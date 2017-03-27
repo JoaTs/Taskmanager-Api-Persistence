@@ -38,19 +38,18 @@ public final class TeamService {
 	}
 
 	public void addUserToTeam(User user, Team team) throws ServiceException {
-		if (teamExists(team) && userService.userExists(user)) {
-			if (isValidTeamSize(team)) {
-				user = userService.getUserByUserId(user.getUserId());
-				team = teamRepository.findOne(team.getId());
-				user.setTeam(team);
-				userService.addOrUpdateUser(user);
-				teamRepository.save(team);
 
-			} else {
-				throw new ServiceException("Team is full!");
-			}
+		teamExists(team);
+		userService.userExists(user);
+		if (isValidTeamSize(team)) {
+			user = userService.getUserByUserId(user.getUserId());
+			team = teamRepository.findOne(team.getId());
+			user.setTeam(team);
+			userService.addOrUpdateUser(user);
+			teamRepository.save(team);
+
 		} else {
-			throw new ServiceException("Team or user not found");
+			throw new ServiceException("Team is full!");
 		}
 	}
 
@@ -58,8 +57,10 @@ public final class TeamService {
 		return teamRepository.findOne(id);
 	}
 
-	public boolean teamExists(Team team) {
-		return teamRepository.findOne(team.getId()) != null;
+	public void teamExists(Team team) throws ServiceException {
+		if (teamRepository.findOne(team.getId()) == null) {
+			throw new ServiceException("Team not found");
+		}
 	}
 
 	private boolean isValidTeamSize(Team team) {

@@ -31,7 +31,6 @@ public class User extends AbstractEntity {
     private boolean activeUser;
     @ManyToOne
     private Team team;
-    @XmlTransient
     @OneToMany(mappedBy = "user")
     private Collection<WorkItem> workitems;
     

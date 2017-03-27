@@ -54,5 +54,24 @@ public class Issue extends AbstractEntity {
 		return "Issue " + getId() + ", description: " + description + ", is open: " + openIssue + ", workitem id: "
 				+ workItem;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof Issue) {
+			Issue issueObj = (Issue) obj;
+			return issueObj.getId() == getId();
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result += 7 * getId();
+		return result;
+	}
 
 }

@@ -6,12 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
@@ -96,6 +94,25 @@ public class WorkItem extends AbstractEntity {
 	public String toString() {
 		return "Workitem " + getId() + ", title: " + title + ", description: " + description + ", status: " + status
 				+ ", assignedUserId: " + user + ", dateOfCompletion: " + dateOfCompletion;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof WorkItem) {
+			WorkItem WorkItemObj = (WorkItem) obj;
+			return WorkItemObj.getId() == getId();
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result += 7 * getId();
+		return result;
 	}
 
 }

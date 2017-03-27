@@ -47,11 +47,24 @@ public final class TeamResource {
 		this.workItemService = workItemService;
 	}
 
+	@POST
+	public Response addTeam(Team team) {
+		Team newTeam = teamService.getTeamById(team.getId());
+		if (newTeam == null) {
+			team = new Team(team.getTeamName());
+			teamService.addOrUpdateTeam(team);
+			URI location = uriInfo.getAbsolutePathBuilder().path(team.getId().toString()).build();
+			return Response.created(location).build();
+
+		}
+		return Response.status(Status.BAD_REQUEST).build();
+	}
+
 	@GET
 	public Response getAllTeams() {
 		Collection<Team> teams = teamService.getAllTeams();
 		if (teams.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(teams).build();
 	}
@@ -71,7 +84,7 @@ public final class TeamResource {
 	public Response getUsersFromTeam(@PathParam("id") Long id) {
 		Collection<User> users = userService.getUsersByTeamId(id);
 		if (users.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(users).build();
 	}
@@ -81,21 +94,9 @@ public final class TeamResource {
 	public Response getWorkItemsFromTeam(@PathParam("id") Long id) {
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByTeam(id);
 		if (workItems.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
-	}
-
-	@POST
-	public Response addTeam(Team team) {
-		Team newTeam = teamService.getTeamById(team.getId());
-		if (newTeam == null) {
-			Team teamfromDB = teamService.addOrUpdateTeam(team);
-			URI location = uriInfo.getAbsolutePathBuilder().path(teamfromDB.getId().toString()).build();
-			return Response.created(location).build();
-
-		}
-		return Response.status(Status.BAD_REQUEST).build();
 	}
 
 	@PUT
@@ -114,7 +115,7 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}/users/{userId}")
-	public Response addUserToTeam(@PathParam("id") long id, @PathParam("userId") String userId,
+	public Response addUserToTeam(@PathParam("id") Long id, @PathParam("userId") String userId,
 			TeamUserContainer container) throws WebApplicationException {
 
 		Team team = container.getTeam();
@@ -126,8 +127,6 @@ public final class TeamResource {
 		try {
 			teamService.addUserToTeam(user, team);
 		} catch (ServiceException e) {
-			// throw new WebApplicationException(
-			// Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build());
 			return Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
 		}
 		return Response.ok().build();

@@ -27,32 +27,18 @@ import se.rejjd.service.WorkItemService;
 
 @Component
 @Path("/users")
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class UserResource {
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public final class UserResource {
 
-	private UserService userService;
-	private WorkItemService workItemService;
+	private final UserService userService;
+	private final WorkItemService workItemService;
 	@Context
 	private UriInfo uriInfo;
 
 	public UserResource(UserService userService, WorkItemService workItemService) {
 		this.userService = userService;
 		this.workItemService = workItemService;
-	}
-
-	@PUT
-	@Path("{userId}")
-	public Response updateUser(@PathParam("userId") String userId, User user) throws ServiceException {
-		if (!userId.equals(user.getUserId())) {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		User userfromDb = userService.getUserByUserId(userId);
-		if (userfromDb == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		userService.addOrUpdateUser(user);
-		return Response.ok().build();
 	}
 
 	@POST
@@ -83,7 +69,7 @@ public class UserResource {
 	public Response getUserByName(@BeanParam UserQueryNameParam param) {
 		Collection<User> users = userService.getUsers(param.getFirstname(), param.getLastname(), param.getUsername());
 		if (users.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(users).build();
 	}
@@ -94,9 +80,23 @@ public class UserResource {
 		User user = userService.getUserByUserId(userId);
 		Collection<WorkItem> workItems = workItemService.getAllWorkItemsByUser(user);
 		if (workItems.isEmpty()) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.noContent().build();
 		}
 		return Response.ok(workItems).build();
+	}
+
+	@PUT
+	@Path("{userId}")
+	public Response updateUser(@PathParam("userId") String userId, User user) throws ServiceException {
+		if (!userId.equals(user.getUserId())) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		User userfromDb = userService.getUserByUserId(userId);
+		if (userfromDb == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		userService.addOrUpdateUser(user);
+		return Response.ok().build();
 	}
 
 	@PUT

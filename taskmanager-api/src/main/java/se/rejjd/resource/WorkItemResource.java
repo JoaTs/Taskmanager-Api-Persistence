@@ -29,7 +29,7 @@ import se.rejjd.service.WorkItemService;
 @Path("/workitems")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class WorkItemResource {
+public final class WorkItemResource {
 
 	@Context
 	private UriInfo uriInfo;
@@ -43,7 +43,7 @@ public class WorkItemResource {
 	}
 
 	@POST
-	public Response createWorkItem(WorkItem workItem) {
+	public Response addWorkItem(WorkItem workItem) {
 		WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
 		if (workitemFromDb != null) {
 			return Response.status(Status.FOUND).build();
@@ -52,50 +52,6 @@ public class WorkItemResource {
 		workItemService.addOrUpdateWorkItem(workItem);
 		URI location = uriInfo.getAbsolutePathBuilder().path(workItem.getId().toString()).build();
 		return Response.created(location).build();
-	}
-
-	@GET
-	@Path("{id}")
-	public Response getWorkItem(@PathParam("id") Long id) {
-		WorkItem workitem = workItemService.getWorkItemById(id);
-		if (workitem == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		return Response.ok(workitem).build();
-	}
-
-	@GET
-	public Response getWorkItemByStatusOrDescription(@BeanParam WorkItemQueryParam param) {
-		Collection<WorkItem> workitems = null;
-		if (param.getStatus() != null) {
-			workitems = workItemService.getWorkItemsByStatus(param.getStatus());
-			if (workitems.isEmpty()) {
-				return Response.status(Status.NOT_FOUND).build();
-			}
-			return Response.ok(workitems).build();
-		} else {
-			workitems = workItemService.getWorkItemByDescripton(param.getDescription());
-			if (workitems.isEmpty()) {
-				return Response.status(Status.NOT_FOUND).build();
-			}
-			return Response.ok(workitems).build();
-		}
-	}
-
-	@PUT
-	@Path("{id}")
-	public Response updateWorkItem(@PathParam("id") Long id, WorkItem workItem) throws ServiceException {
-		if (workItem.getId() != id) {
-			return Response.status(Status.BAD_REQUEST).entity("conflicting id's").build();
-		}
-		try {
-			WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
-			workItemService.updateWorkItemStatus(workitemFromDb, workItem.getStatus());
-		} catch (ServiceException e) {
-			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-		}
-
-		return Response.ok().build();
 	}
 
 	@POST
@@ -115,16 +71,32 @@ public class WorkItemResource {
 		return Response.created(location).build();
 	}
 
-	@PUT
-	@Path("{id}/issues/{issueId}")
-	public Response updateIssue(@PathParam("id") Long id, @PathParam("issueId") Long issueId, Issue issue) {
-		WorkItem workItem = workItemService.getWorkItemById(id);
-		Issue issueFromDb = issueService.findIssueById(issue.getId());
-		if (workItem == null || issueFromDb == null) {
+	@GET
+	@Path("{id}")
+	public Response getWorkItem(@PathParam("id") Long id) {
+		WorkItem workitem = workItemService.getWorkItemById(id);
+		if (workitem == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		issueService.addOrUpdate(issue);
-		return Response.ok().build();
+		return Response.ok(workitem).build();
+	}
+
+	@GET
+	public Response getWorkItemByStatusOrDescription(@BeanParam WorkItemQueryParam param) {
+		Collection<WorkItem> workitems = null;
+		if (param.getStatus() != null) {
+			workitems = workItemService.getWorkItemsByStatus(param.getStatus());
+			if (workitems.isEmpty()) {
+				return Response.noContent().build();
+			}
+			return Response.ok(workitems).build();
+		} else {
+			workitems = workItemService.getWorkItemByDescripton(param.getDescription());
+			if (workitems.isEmpty()) {
+				return Response.noContent().build();
+			}
+			return Response.ok(workitems).build();
+		}
 	}
 
 	@GET
@@ -136,4 +108,37 @@ public class WorkItemResource {
 		}
 		return Response.ok(workItems).build();
 	}
+
+	@PUT
+	@Path("{id}")
+	public Response updateWorkItem(@PathParam("id") Long id, WorkItem workItem) throws ServiceException {
+		if (workItem.getId() != id) {
+			return Response.status(Status.BAD_REQUEST).entity("conflicting id's").build();
+		}
+		try {
+			WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
+			workItemService.updateWorkItemStatus(workitemFromDb, workItem.getStatus());
+		} catch (ServiceException e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+		return Response.ok().build();
+	}
+
+	@PUT
+	@Path("{id}/issues/{issueId}")
+	public Response updateIssue(@PathParam("id") Long id, @PathParam("issueId") Long issueId, Issue issue) {
+		WorkItem workItem = workItemService.getWorkItemById(id);
+		Issue issueFromDb = issueService.findIssueById(issue.getId());
+		if (workItem == null || issueFromDb == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		try {
+			issueService.updateIssue(issue);
+		} catch (ServiceException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok().build();
+	}
+	
 }
