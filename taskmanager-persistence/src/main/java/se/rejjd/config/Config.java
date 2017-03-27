@@ -63,7 +63,7 @@ public class Config {
 	}
 
 	@Bean
-	public AuditorAware<User> auditorProvider() {
+	public AuditorAware<String> auditorProvider() {
 		return new AuditorAwareImpl();
 	}
 }

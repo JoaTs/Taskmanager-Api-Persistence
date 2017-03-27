@@ -33,13 +33,13 @@ public class TaskmanagerPersistenceApplication {
 //			 teamService.addOrUpdateTeam(new Team("teamName3"));
 //			 teamService.addOrUpdateTeam(new Team("teamName4"));
 			
-//			 User user = new User("usernamhytdasddd", "firstname", "lastnam",
-//			 "2002");
-//			 User user2 = new User("usernamhytdasdddd", "firstname",
-//			 "lastnam", "2003");
+//			 User user = new User("userddnamhytdadsddd", "firstname", "lastnam",
+//			 "2005");
+//			 User user2 = new User("userfgnamhytdasdhfddd", "firstname",
+//			 "lastnam", "2006");
 //			
 //			 UserService userService = context.getBean(UserService.class);
-//			
+////			
 //			 userService.addOrUpdateUser(user);
 //			 userService.addOrUpdateUser(user2);
 			
