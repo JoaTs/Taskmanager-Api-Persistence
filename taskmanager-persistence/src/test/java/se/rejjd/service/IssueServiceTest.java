@@ -16,7 +16,7 @@ import se.rejjd.model.Issue;
 import se.rejjd.model.WorkItem;
 import se.rejjd.model.WorkItem.Status;
 
-public final class IssueServiceTest extends AbstractTest {
+public class IssueServiceTest extends AbstractTest {
 	@Autowired
 	private IssueService issueService;
 	@Autowired
@@ -44,7 +44,8 @@ public final class IssueServiceTest extends AbstractTest {
 		String updatedDescription = "updated";
 		WorkItem updateWorkitem = workItemService.updateWorkItemStatus(workItem, Status.DONE);
 		Issue issue = issueService.addIssue(updateWorkitem, "description");
-		issueService.updateDescription(issue, updatedDescription);
+		issue.setDescription(updatedDescription);
+		issueService.updateIssue(issue);
 		Issue issueFromDb = issueService.findIssueById(issue.getId());
 		assertThat(issueFromDb.getDescription(), is(updatedDescription));
 		
@@ -54,7 +55,8 @@ public final class IssueServiceTest extends AbstractTest {
 	public void canUpdateIssueStatus() throws ServiceException{
 		WorkItem updatedWorkItem = workItemService.updateWorkItemStatus(workItem, Status.DONE);
 		Issue issue = issueService.addIssue(updatedWorkItem, "description");
-		issueService.updateStatus(issue, false);
+		issue.setOpenIssue(false);
+		issueService.updateIssue(issue);
 		Issue issueFromDb = issueService.findIssueById(issue.getId());
 		assertThat(issueFromDb.isOpenIssue(), is(false));
 	}

@@ -123,10 +123,14 @@ public final class WorkItemResource {
 		if (workItem == null || issueFromDb == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		issueService.addOrUpdate(issue);
+		try {
+			issueService.updateIssue(issue);
+		} catch (ServiceException e) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 		return Response.ok().build();
 	}
-
+	
 	@GET
 	@Path("/issues")
 	public Response getWorkItemsWithIssues() {
