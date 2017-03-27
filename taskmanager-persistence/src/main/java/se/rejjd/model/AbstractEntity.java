@@ -14,6 +14,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 @XmlRootElement
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -23,12 +26,20 @@ public abstract class AbstractEntity {
 	@GeneratedValue
 	private Long id;
 
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
 	@CreatedDate
 	private Date createdDate;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
 	@CreatedBy
 	private String createdBy;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
 	@LastModifiedDate
 	private Date lastModifiedDate;
+	@JsonDeserialize(using = JsonDateDeserializer.class)
+	@JsonSerialize(using = JsonDateSerializer.class)
 	@LastModifiedBy
 	private String lastModifiedBy;
 

@@ -136,4 +136,10 @@ public class WorkItemResource {
 		}
 		return Response.ok(workItems).build();
 	}
+
+	@GET
+	@Path("/issues/issues")
+	public Response getIssues() {
+		return Response.ok(issueService.getAllIssues()).build();
+	}
 }
