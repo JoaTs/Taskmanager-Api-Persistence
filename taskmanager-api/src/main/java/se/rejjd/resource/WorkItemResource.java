@@ -141,13 +141,4 @@ public final class WorkItemResource {
 		return Response.ok().build();
 	}
 	
-	@GET
-	@Path("/issues")
-	public Response getWorkItemsWithIssues() {
-		Collection<WorkItem> workItems = workItemService.getAllWorkItemsWithIssues();
-		if (workItems.isEmpty()) {
-			return Response.noContent().build();
-		}
-		return Response.ok(workItems).build();
-	}
 }
