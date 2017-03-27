@@ -7,7 +7,7 @@ import se.rejjd.model.Team;
 import se.rejjd.model.User;
 
 @XmlRootElement
-public class TeamUserContainer {
+public final class TeamUserContainer {
 
 	@XmlElement
 	private Team team;

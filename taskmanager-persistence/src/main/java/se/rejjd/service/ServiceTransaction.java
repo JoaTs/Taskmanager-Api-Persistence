@@ -15,7 +15,7 @@ class ServiceTransaction {
 		try {
 			return action.action();
 		} catch (DataAccessException e) {
-			throw new ServiceException("Nobaie");
+			throw new ServiceException("Requested action could not be performed!");
 		}
 	}
 

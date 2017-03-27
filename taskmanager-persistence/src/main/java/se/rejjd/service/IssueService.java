@@ -45,17 +45,15 @@ public final class IssueService {
 		}
 	}
 
-	public Issue addOrUpdate(Issue issue) {
+	private Issue addOrUpdate(Issue issue) {
 		return issuerepository.save(issue);
 	}
 
-	public Issue updateDescription(Issue issue, String description) {
-		issue.setDescription(description);
-		return addOrUpdate(issue);
-	}
-
-	public Issue updateStatus(Issue issue, boolean status) {
-		issue.setOpenIssue(status);
+	public Issue updateIssue(Issue issue) throws ServiceException {
+		Issue issueDb = issuerepository.findOne(issue.getId());
+		if(issueDb == null){
+			throw new ServiceException("Issue not found!");
+		}
 		return addOrUpdate(issue);
 	}
 
