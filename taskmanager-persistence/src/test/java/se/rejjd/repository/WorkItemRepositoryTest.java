@@ -34,7 +34,6 @@ public final class WorkItemRepositoryTest extends AbstractTest {
 
 	@Test
 	public void canFindWorkitemByTeamId() {
-
 		when(workItemRepository.findByDescription(description))
 				.thenReturn(Stream.of(workItem).collect(Collectors.toList()));
 		List<WorkItem> workItems = workItemRepository.findByDescription(description).stream()
