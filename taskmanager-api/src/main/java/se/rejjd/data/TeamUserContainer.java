@@ -21,5 +21,4 @@ public final class TeamUserContainer {
 	public User getUser() {
 		return user;
 	}
-
 }
