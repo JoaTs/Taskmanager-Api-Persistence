@@ -44,7 +44,6 @@ public final class TeamService {
 	}
 
 	public void addUserToTeam(User user, Team team) throws ServiceException {
-
 		teamExists(team);
 		userService.userExists(user);
 		if (isValidTeamSize(team)) {

@@ -30,8 +30,8 @@ public final class IssueService {
 	}
 
 	public Issue addIssue(WorkItem workItem, String description) throws ServiceException {
-		try{
-		if (workItem.getStatus() == Status.DONE) {
+		try {
+			if (workItem.getStatus() == Status.DONE) {
 				return transaction.execute(() -> {
 					workItem.setStatus(Status.UNSTARTED);
 					workItemRepository.save(workItem);
@@ -46,15 +46,14 @@ public final class IssueService {
 	}
 
 	private Issue addOrUpdate(Issue issue) throws ServiceException {
-		return transaction.executeAction(()->{
+		return transaction.executeAction(() -> {
 			return issuerepository.save(issue);
-			
 		});
 	}
 
 	public Issue updateIssue(Issue issue) throws ServiceException {
 		Issue issueDb = issuerepository.findOne(issue.getId());
-		if(issueDb == null){
+		if (issueDb == null) {
 			throw new ServiceException("Issue not found!");
 		}
 		return addOrUpdate(issue);
@@ -65,7 +64,8 @@ public final class IssueService {
 		issuerepository.findAll().forEach(i -> listOfIssues.add(i));
 		return listOfIssues;
 	}
-	public Issue findIssueById(Long id){
+
+	public Issue findIssueById(Long id) {
 		return issuerepository.findOne(id);
 	}
 }
