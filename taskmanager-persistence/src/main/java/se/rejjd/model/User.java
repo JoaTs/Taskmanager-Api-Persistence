@@ -74,7 +74,7 @@ public class User extends AbstractEntity {
         return activeUser;
     }
     
-    @XmlTransient
+//    @XmlTransient
     public Team getTeam() {
         return team;
     }

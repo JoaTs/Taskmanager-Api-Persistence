@@ -118,6 +118,11 @@ public final class WorkItemResource {
 		try {
 			WorkItem workitemFromDb = workItemService.getWorkItemById(workItem.getId());
 			workItemService.updateWorkItemStatus(workitemFromDb, workItem.getStatus());
+			
+			workitemFromDb.setTitle(workItem.getTitle());
+			workitemFromDb.setDescription(workItem.getDescription());
+			
+			workItemService.addOrUpdateWorkItem(workitemFromDb);
 		} catch (ServiceException e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}

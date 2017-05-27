@@ -69,7 +69,12 @@ public class WorkItem extends AbstractEntity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
