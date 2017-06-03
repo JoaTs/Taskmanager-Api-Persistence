@@ -43,7 +43,11 @@ public final class TeamService {
 		return teamRepository.findAll();
 	}
 
-	public void addUserToTeam(User user, Team team) throws ServiceException {
+	public void addUserToTeam(String userId, String teamId) throws ServiceException {
+		
+		User user = userService.getUserByUserId(userId);
+		Team team = teamRepository.findOne(Long.valueOf(teamId));
+		
 		teamExists(team);
 		userService.userExists(user);
 		if (isValidTeamSize(team)) {

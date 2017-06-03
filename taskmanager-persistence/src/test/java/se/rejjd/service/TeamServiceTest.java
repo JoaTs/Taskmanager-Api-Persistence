@@ -46,7 +46,7 @@ public class TeamServiceTest extends AbstractTest {
 	public void canAddUserToTeam() throws ServiceException {
 		team = teamService.addOrUpdateTeam(team);
 		user = userService.addOrUpdateUser(user);
-		teamService.addUserToTeam(user, team);
+		teamService.addUserToTeam(user.getUserId(), String.valueOf(team.getId()));
 
 		teamDB = teamService.getTeamById(team.getId());
 
@@ -77,7 +77,7 @@ public class TeamServiceTest extends AbstractTest {
 		for (int i = 1; i < 12; i++) {
 			User user = new User("username000" + i, "firstname", "lastname", "000" + i);
 			userService.addOrUpdateUser(user);
-			teamService.addUserToTeam(user, team);
+			teamService.addUserToTeam(user.getUserId(), String.valueOf(team.getId()));
 		}
 	}
 

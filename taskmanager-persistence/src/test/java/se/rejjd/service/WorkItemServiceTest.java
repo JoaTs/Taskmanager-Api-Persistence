@@ -119,7 +119,7 @@ public class WorkItemServiceTest extends AbstractTest {
 
 		userService.addOrUpdateUser(user1);
 		teamService.addOrUpdateTeam(team1);
-		teamService.addUserToTeam(user1, team1);
+		teamService.addUserToTeam(user1.getUserId(), String.valueOf(team1.getId()));
 
 		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-3", "descrip"));
 		workItemService.addOrUpdateWorkItem(new WorkItem("workitem-4", "description"));

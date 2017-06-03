@@ -115,17 +115,17 @@ public final class TeamResource {
 
 	@PUT
 	@Path("{id}/users/{userId}")
-	public Response addUserToTeam(@PathParam("id") Long id, @PathParam("userId") String userId,
+	public Response addUserToTeam(@PathParam("id") String teamId, @PathParam("userId") String userId,
 			TeamUserContainer container) throws WebApplicationException {
 
-		Team team = container.getTeam();
-		User user = container.getUser();
+//		Team team = container.getTeam();
+//		User user = container.getUser();
 
-		if (team.getId() != id && user.getUserId() != userId) {
-			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
-		}
+//		if (team.getId() != teamId && user.getUserId() != userId) {
+//			throw new WebApplicationException("conflicting id's", Status.BAD_REQUEST);
+//		}
 		try {
-			teamService.addUserToTeam(user, team);
+			teamService.addUserToTeam(userId, teamId);
 		} catch (ServiceException e) {
 			return Response.status(Status.PRECONDITION_FAILED).entity(e.getMessage()).build();
 		}

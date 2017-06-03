@@ -105,7 +105,9 @@ public final class UserResource {
 			throws ServiceException {
 		WorkItem workItem = workItemService.getWorkItemById(id);
 		User user = userService.getUserByUserId(userId);
-		workItemService.addUserToWorkItem(workItem, user);
+		if(workItem.getUser().getId() != user.getId()){
+			workItemService.addUserToWorkItem(workItem, user);
+		}
 		return Response.ok().build();
 	}
 }
