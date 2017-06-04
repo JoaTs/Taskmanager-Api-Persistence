@@ -105,6 +105,10 @@ public final class UserResource {
 		try{
 		WorkItem workItem = workItemService.getWorkItemById(id);
 		User user = userService.getUserByUserId(userId);
+		if(workItem == null || user == null){
+			return Response.status(Status.NOT_FOUND).build(); 
+		}
+		
 		if(workItem.getUser() != null ){
 			if(workItem.getUser().getId() != user.getId()){
 				workItemService.addUserToWorkItem(workItem, user);
