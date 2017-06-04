@@ -1,6 +1,6 @@
 package se.rejjd.service;
 
-public final class ServiceException extends Exception {
+public final class ServiceException extends RuntimeException {
 
 	private static final long serialVersionUID = 673945921543649662L;
 
