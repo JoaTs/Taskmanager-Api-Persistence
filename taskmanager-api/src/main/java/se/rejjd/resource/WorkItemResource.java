@@ -112,7 +112,8 @@ public final class WorkItemResource {
 	@PUT
 	@Path("{id}")
 	public Response updateWorkItem(@PathParam("id") Long id, WorkItem workItem) throws ServiceException {
-		if (workItem.getId() != id) {
+		
+		if (!workItem.getId().equals(id)) {
 			return Response.status(Status.BAD_REQUEST).entity("conflicting id's").build();
 		}
 		try {
